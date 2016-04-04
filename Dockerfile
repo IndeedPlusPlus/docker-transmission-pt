@@ -2,7 +2,11 @@ FROM debian:squeeze
 
 MAINTAINER Jared Feng <github@indeed.moe>
 
-RUN apt-get update && \
+# Debian squeeze has reached end of life thus have to be found in archive.
+RUN sed -i -e 's/httpredir.debian.org/archive.debian.org/g' /etc/apt/sources.list && \
+    sed -i -e '/squeeze-updates/d' /etc/apt/sources.list
+
+RUN apt-get -o Acquire::Check-Valid-Until=false update && \
     apt-get upgrade -y && \
     apt-get install -y transmission-daemon
 
